@@ -30,7 +30,6 @@ class Program
             return result;
         }
     }
-
     public class View(Input input)
     {
         public void WelcomeMessage()
@@ -48,7 +47,6 @@ class Program
             Console.WriteLine("How many times do you want to roll the die?");
             return input.GetInt("Enter the number of rolls: ");
         }
-
         public void DisplayBars(List<int> results, int faces, int rolls)
         {
             Console.Clear();
@@ -61,15 +59,29 @@ class Program
                 string start = $"Face {i + 1}: ";
                 int padding = 10 - start.Length; // Adjust padding based on the length of the start string
                 Console.Write(start + new string(' ', padding)); // Add spaces for alignment
-                int length = (int)((double)results[i] / maxLength * 50); // Scale to 50 characters
-                string times = $" {results[i]} times";
+                int timesCount = results[i];
+                int length = (int)((double)timesCount / maxLength * 50); // Scale to 50 characters
+                string times = $" {timesCount} times";
                 int barLength = Math.Max(0, length - times.Length);
-                Console.BackgroundColor = ConsoleColorHelper.GetUniqueRandomColor(); // Random background color
-                Console.ForegroundColor = ConsoleColor.Black; // Text color
-                Console.Write(times);
-                Console.Write(new string(' ', barLength)); // Fill the rest with spaces
-                Console.ResetColor(); // Reset colors
-                Console.WriteLine(); // Move to the next line
+                if (timesCount == 0)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.Gray; // Text color for zero count
+                    Console.Write(times);
+                    Console.WriteLine();
+                    Console.ResetColor(); // Reset colors
+
+                }
+                else
+                {
+                    Console.BackgroundColor = ConsoleColorHelper.GetUniqueRandomColor(); // Random background color
+                    Console.ForegroundColor = ConsoleColor.Black; // Text color
+                    Console.Write(times);
+                    Console.Write(new string(' ', barLength)); // Fill the rest with spaces
+                    Console.ResetColor(); // Reset colors
+                    Console.WriteLine(); // Move to the next line
+                }
+
             }
         }
     }
