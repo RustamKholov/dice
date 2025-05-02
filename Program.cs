@@ -1,4 +1,5 @@
-﻿namespace dice;
+﻿using Spectre.Console;
+namespace dice;
 
 class Program
 {
@@ -10,7 +11,12 @@ class Program
         int faces = view.GetFaces();
         int rolls = view.GetRolls();
         var results = diceRoller.RollMultipleList(faces, rolls);
+        Console.Clear();
+        view.DisplayUsualConsole();
         view.DisplayBars(results, faces, rolls);
+        Console.WriteLine();
+        view.DisplaySpectreConsole();
+        view.DisplayBarsSpectre(results, faces, rolls);
         Console.WriteLine("\nPress any key to exit...");
         Console.ReadKey();
     }
@@ -47,11 +53,17 @@ class Program
             Console.WriteLine("How many times do you want to roll the die?");
             return input.GetInt("Enter the number of rolls: ");
         }
+        public void DisplayUsualConsole(){
+            Console.WriteLine(new string ('=', 50));
+            Console.WriteLine("// Basic Console Display //");
+        }
+        public void DisplaySpectreConsole(){
+            Console.WriteLine(new string ('=', 50));
+            Console.WriteLine("// Spectre.Console Display //");
+        }
         public void DisplayBars(List<int> results, int faces, int rolls)
         {
-            Console.Clear();
             Console.WriteLine($"You rolled a {faces}-sided die {rolls} times.\n");
-            Random random = new Random();
             Console.WriteLine("Results: ");
             int maxLength = results.Max();
             for (int i = 0; i < results.Count; i++)
@@ -83,6 +95,15 @@ class Program
                 }
 
             }
+        }
+        public void DisplayBarsSpectre(List<int> results, int faces, int rolls){
+            
+            var bar = new BarChart()
+                .Width(100)
+                .Label($"You rolled a {faces}-sided die {rolls} times.\n")
+                .CenterLabel()
+                .AddItems(results.Select((result, index) => new BarChartItem($"Face {index + 1}", result, ConsoleColorHelper.GetUniqueRandomColor())));
+            AnsiConsole.Write(bar);
         }
     }
     public class DiceRoller()
